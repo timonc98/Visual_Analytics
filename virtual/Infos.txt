@@ -1,0 +1,10 @@
+Dataset: COVID-19 Radiography Database - https://www.kaggle.com/datasets/tawsifurrahman/covid19-radiography-database
+
+XAI-Methods: Grad-CAM
+Link von Dome: https://github.com/IBM/Contrastive-Explanation-Method
+https://github.com/david-knigge/contrastive-explanation-method 
+Positive negative vergleichen
+
+Paper: https://scholar.google.de/scholar?hl=de&as_sdt=0%2C5&q=COVID-19+Radiography+Database+machine+learning&btnG=&oq=COVID-19+Radiography+Database+machine+lea
+https://scholar.google.de/scholar?hl=de&as_sdt=0%2C5&q=COVID-19+Radiography+Database+Grad-CAM&btnG=
+
