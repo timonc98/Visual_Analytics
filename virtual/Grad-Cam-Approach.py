@@ -26,14 +26,14 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classifica
 
 files = ['Normal', 'COVID', 'Lung_Opacity','Viral Pneumonia']
 #path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual\Dataset"
-path = "C:\Hochschule Aalen\Visual Analytics\Visual_Analytics\virtual\Dataset"
+path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset"
 data_dir = os.path.join(path)
 print(path)
 
 data = []
 for id, level in enumerate(files):
     for file in os.listdir(os.path.join(data_dir, level+'/'+'images')):
-#         data.append(['{}/{}'.format(level, file), level])
+#         data. append(['{}/{}'.format(level, file), level])
         data.append([level +'/' +'images'+ '/'+file, level])
         
 
