@@ -5,7 +5,7 @@ from glob import glob
 from PIL import Image
 import numpy as np
 import pandas as pd
-#mport cv2
+import cv2
 import random
 #import albumentations as A
 import keras
@@ -225,10 +225,12 @@ print("Test")
 plot_loss_2 = PlotLossesCallback()
 
 conv_history = conv_model.fit(x_train, y_train, 
-                        epochs = 10, batch_size = 256,  
+                        epochs =2, batch_size = 256,  
                         validation_data = (x_val, y_val), 
                         
                        verbose=1)
+
+conv_model.save("mein_modell.h5")
 
 #callbacks = [tl_checkpoint_1, plot_loss_2],
 yp_train = conv_model.predict(x_train)
@@ -328,10 +330,15 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index = No
 
 covid_noncovid_heatmap = []
 
-list_images_sample = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
+#list_images_sample = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
+#                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
+#                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
+#                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
+
+list_images_sample = ["C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
+                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
+                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
+                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
 
 for i in list_images_sample:
     img_array = preprocess_input(get_img_array(i, size = img_size))
@@ -390,5 +397,3 @@ titles_list = ["Viral Pneumonia",'Viral Pneumonia Grad','Normal','Normal Grad','
 
 plot_multiple_img(imag, titles_list, ncols = 4, main_title = "GRAD-CAM COVID-19 Image Analysis")
 
-
-# Feature Analysis vllt. einbauen
