@@ -1,5 +1,3 @@
-
-
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import os
@@ -7,9 +5,9 @@ from glob import glob
 from PIL import Image
 import numpy as np
 import pandas as pd
-import cv2
+#mport cv2
 import random
-import albumentations as A
+#import albumentations as A
 import keras
 import matplotlib.cm as cm
 import plotly.express as px
@@ -27,7 +25,8 @@ import tensorflow as tf
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report, recall_score, accuracy_score, precision_score, f1_score
 
 files = ['Normal', 'COVID', 'Lung_Opacity','Viral Pneumonia']
-path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual\Dataset"
+#path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt\Visual_Analytics/virtual\Dataset"
+path = "C:\Hochschule Aalen\Visual Analytics\Visual_Analytics\virtual\Dataset"
 data_dir = os.path.join(path)
 print(path)
 
