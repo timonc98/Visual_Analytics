@@ -226,7 +226,7 @@ print("Test")
 plot_loss_2 = PlotLossesCallback()
 
 conv_history = conv_model.fit(x_train, y_train, 
-                        epochs = 5, batch_size = 256,  
+                        epochs = 10, batch_size = 256,  
                         validation_data = (x_val, y_val), 
                         
                        verbose=1)
@@ -390,3 +390,6 @@ def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
 titles_list = ["Viral Pneumonia",'Viral Pneumonia Grad','Normal','Normal Grad','Lung_Opacity','Lung_Opacity Grad','COVID','COVID Grad']
 
 plot_multiple_img(imag, titles_list, ncols = 4, main_title = "GRAD-CAM COVID-19 Image Analysis")
+
+
+# Feature Analysis vllt. einbauen
