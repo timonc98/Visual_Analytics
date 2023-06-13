@@ -1,45 +1,29 @@
 
 #https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl/notebook
-
-
-
+# Import Libraries
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
-
-# Data Reading 
-
 import os
-from glob import glob
 from PIL import Image
-
-# Data Processing 
-
 import numpy as np
 import pandas as pd
 import cv2
 import random
 import albumentations as A
-
-# Data Analysis
-
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-# Data Modeling & Model Evaluation
-
 from sklearn.model_selection import train_test_split
 from keras.utils import load_img, img_to_array, array_to_img
 from tensorflow.keras import layers, models
 import tensorflow as tf
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report, recall_score, accuracy_score, precision_score, f1_score
-
-# Grad-CAM
-
 import keras
 import matplotlib.cm as cm
 
+
+# Get Data
 levels = ['Normal', 'COVID']
 path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
 data_dir = os.path.join(path)
@@ -57,22 +41,12 @@ samples = 13808
 
 data.head()
 
-df = pd.DataFrame()
-df['corona_result'] = ['Positive', 'Negative']
-df['Count'] = [len(data[data['corona_result'] == 'Positive']), len(data[data['corona_result'] == 'Negative'])]
-df = df.sort_values(by = ['Count'], ascending = False)
+# Count number of Samples
+print('Number of Duplicated Samples: %d'%(data.duplicated().sum()))
+print('Number of Total Samples: %d'%(data.isnull().value_counts()))
 
-fig = px.bar(df, x = 'corona_result', y = 'Count', 
-             color = "corona_result", text_auto='', width = 600, 
-             color_discrete_sequence = ["orange", "purple"],
-             template = 'plotly_dark')
 
-fig.update_xaxes(showgrid = False)
-fig.update_yaxes(showgrid = False)
-fig.update_traces(textfont_size = 12, textangle = 0, textposition = "outside", cliponaxis = False)
-
-#fig.show()
-
+#  Show Image Samples
 data['image'] = data['path'].map(lambda x: np.asarray(Image.open(x).resize((75,75))))
 
 data.head()
@@ -90,10 +64,7 @@ for n_axs, (type_name, type_rows) in zip(m_axs, data.sort_values(['corona_result
         c_ax.axis('off')
 
 
-
-#print('Number of Duplicated Samples: %d'%(data.duplicated().sum()))
-#print('Number of Total Samples: %d'%(data.isnull().value_counts()))
-
+# Data Augmentation
 
 def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
     
@@ -107,6 +78,26 @@ def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
         myaxes[i // ncols][i % ncols].set_title(title, fontsize = 15)
         
     plt.show()
+
+
+
+image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png")
+
+albumentation_list = [A.RandomFog(p = 1), A.RandomBrightness(p = 1),
+                      A.RandomCrop(p = 1,height = 199, width = 199), A.Rotate(p = 1, limit = 90),
+                      A.RGBShift(p = 1), A.VerticalFlip(p = 1), A.RandomContrast(limit = 0.5, p = 1)]
+
+img_matrix_list = []
+bboxes_list = []
+for aug_type in albumentation_list:
+    img = aug_type(image = image_example)['image']
+    img_matrix_list.append(img)
+
+img_matrix_list.insert(0,image_example)    
+
+titles_list = ["Original", "RandomFog", "RandomBrightness", "RandomCrop", "Rotate", "RGBShift", "VerticalFlip", "RandomContrast"]
+
+plot_multiple_img(img_matrix_list, titles_list, ncols = 4, main_title = "Different Types of Augmentations")
 
 
 all_data = []
@@ -166,14 +157,14 @@ n_classes= 4
 
 cnn = create_model(n_classes, input_shape)
 cnn.summary()
-cnn.fit(x_train, y_train, batch_size=64, epochs= 1, verbose=1)
+cnn.fit(x_train, y_train, batch_size=64, epochs= 10, verbose=1)
 cnn.save('cnn_model.h5', save_format='h5')
 
 es = tf.keras.callbacks.EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1, patience = 4)
 
 #tf.random.set_seed(42)
 history = cnn.fit(x_train, y_train, 
-                        epochs = 1, batch_size = 256,  
+                        epochs = 10, batch_size = 256,  
                         validation_data = (x_val, y_val), 
                         callbacks = [es])
 
@@ -366,109 +357,4 @@ for i in img_path:
     print("Image", img_path.index(i) + 1, ":", z)
 
 
-
-
-##
-##
-##
-##
-##
-from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.layers import Conv2D, Dense, Dropout, Flatten, MaxPooling2D, Input, UpSampling2D
-tf.get_logger().setLevel(40) 
-#tf.compat.v1.disable_v2_behavior() 
-from alibi.explainers import CEM
-from tensorflow.keras import backend as K
-
-print('TF version: ', tf.__version__)
-print('Eager execution enabled: ', tf.executing_eagerly()) 
-tf.enable_eager_execution()
-
-cnn = load_model('cnn_model.h5')
-score = cnn.evaluate(x_test, y_test, verbose=0)
-print('Test accuracy: ', score[1])
-
-def ae_model():
-    x_in = Input(shape=(70, 70, 3))
-    x = Conv2D(16, (3, 3), activation='relu', padding='same')(x_in)
-    x = Conv2D(16, (3, 3), activation='relu', padding='same')(x)
-    x = MaxPooling2D((2, 2), padding='same')(x)
-    encoded = Conv2D(1, (3, 3), activation=None, padding='same')(x)
-
-    x = Conv2D(16, (3, 3), activation='relu', padding='same')(encoded)
-    x = UpSampling2D((2, 2))(x)
-    x = Conv2D(16, (3, 3), activation='relu', padding='same')(x)
-    decoded = Conv2D(3, (3, 3), activation=None, padding='same')(x)
-
-    autoencoder = Model(x_in, decoded)
-    autoencoder.compile(optimizer='adam', loss='mse')
-
-    return autoencoder
-
-ae = ae_model()
-ae.summary()
-ae.fit(x_train, x_train, batch_size=128, epochs=1, validation_data=(x_test, x_test), verbose=0)
-ae.save('mnist_ae.h5', save_format='h5')
-
-ae = load_model('mnist_ae.h5')
-
-decoded_imgs = ae.predict(x_test)
-n = 5
-plt.figure(figsize=(70, 3))
-for i in range(1, n+1):
-    # display original
-    ax = plt.subplot(2, n, i)
-    plt.imshow(x_test[i].reshape(70, 70, 3))
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-    # display reconstruction
-    ax = plt.subplot(2, n, i + n)
-    plt.imshow(decoded_imgs[i].reshape(70, 70, 3))
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-plt.show()
-
-idx = 15
-X = x_test[idx].reshape((1,) + x_test[idx].shape) #(1,28,28,1)
-
-plt.imshow(X.reshape(70, 70, 3))
-cnn.predict(X).argmax(), cnn.predict(X).max()
-
-#cnn_model.predict(X).argmax(), cnn_model.predict(X).max()
-
-mode = 'PN'  
-shape = (1,) + x_train.shape[1:]  
-kappa = 0. 
-beta = .1 
-gamma = 100  
-c_init = 1.  
-              
-c_steps = 10 
-max_iterations = 1000  
-feature_range = (x_train.min(),x_train.max())  
-clip = (-1000.,1000.)  
-lr = 1e-2  
-no_info_val = -1. 
-
-cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
-          gamma=gamma, ae_model=ae, max_iterations=max_iterations,
-          c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
-
-explanation = cem.explain(X, verbose=False)
-
-print('Pertinent negative prediction: {}'.format(explanation.PN_pred))
-plt.imshow(explanation.PN.reshape(70, 70, 3))
-plt.show()
-
-mode = 'PP'
-
-cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
-          gamma=gamma, ae_model=ae, max_iterations=max_iterations,
-          c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
-
-explanation = cem.explain(X)
-
-print('Pertinent positive prediction: {}'.format(explanation.PP_pred))
-plt.imshow(explanation.PP.reshape(70, 70, 3));
-plt.show()
+#https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl
