@@ -6,14 +6,14 @@ from PIL import Image
 
 def main():
     st.set_page_config(layout="wide")
-    # Titel des Dashboards
-    st.markdown("<h1 style='text-align: center; text-decoration: underline;'>Virtual Analytics</h1>", unsafe_allow_html=True)
-
-    # Seiten auswählen
-    page = st.selectbox("Beispiele:", ["Beispiel 1", "Beispiel 2", "Beispiel 3"])
+    # Accordion-Widget für Seitenauswahl
+    with st.sidebar:
+        st.markdown("<h1 style='text-align: center; text-decoration: underline;'>Virtual Analytics</h1>", unsafe_allow_html=True)
+        st.sidebar.title("Seiten")
+        page = st.sidebar.radio("Seiten auswählen:", ["Beispiel 1", "Beispiel 2", "Beispiel 3"])
 
     # Spaltenaufteilung des Dashboards
-    col1, col2, col3 = st.columns([3, 3, 3])
+    col1, col2, col3 = st.columns(3)
 
     if page == "Beispiel 1":
         # Titel des Dashboards
@@ -43,7 +43,7 @@ def main():
             image_top_right = Image.open(image_top_right_path)
             st.image(image_top_right, width=150)
             st.text("Beschreibung für Bild rechts oben")
-
+        
         # Bilder in der mittleren Zeile
         with col1:
             st.header("Originalbild")
