@@ -41,7 +41,11 @@ import keras
 import matplotlib.cm as cm
 
 levels = ['Normal', 'COVID']
-path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
+#Marcel Dateipfad
+#path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
+
+#Timon Dateipfad
+path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset"
 data_dir = os.path.join(path)
 
 data = []
@@ -278,11 +282,17 @@ imag = []
 last_conv_layer_name = "block14_sepconv2_act"
 
 # Reading 2 Covid & 2 Normal Images for Grad-Cam Analysis
+#Marcel Dateipfad
+# img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
+#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
+#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
+#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
 
-img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
+#Timon Dateipfad
+img_path = ["C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
+                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
+                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
+                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
 
 # To Get Image into numpy array
 
@@ -470,5 +480,5 @@ cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
 explanation = cem.explain(X)
 
 print('Pertinent positive prediction: {}'.format(explanation.PP_pred))
-plt.imshow(explanation.PP.reshape(70, 70, 3));
+plt.imshow(explanation.PP.reshape(70, 70, 3))
 plt.show()
