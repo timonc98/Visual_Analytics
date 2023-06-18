@@ -1,45 +1,29 @@
 
 #https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl/notebook
-
-
-
+# Import Libraries
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
-
-# Data Reading 
-
 import os
-from glob import glob
 from PIL import Image
-
-# Data Processing 
-
 import numpy as np
 import pandas as pd
 import cv2
 import random
 import albumentations as A
-
-# Data Analysis
-
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-# Data Modeling & Model Evaluation
-
 from sklearn.model_selection import train_test_split
 from keras.utils import load_img, img_to_array, array_to_img
 from tensorflow.keras import layers, models
 import tensorflow as tf
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report, recall_score, accuracy_score, precision_score, f1_score
-
-# Grad-CAM
-
 import keras
 import matplotlib.cm as cm
 
+
+# Get Data
 levels = ['Normal', 'COVID']
 #Marcel Dateipfad
 #path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
@@ -61,22 +45,12 @@ samples = 13808
 
 data.head()
 
-df = pd.DataFrame()
-df['corona_result'] = ['Positive', 'Negative']
-df['Count'] = [len(data[data['corona_result'] == 'Positive']), len(data[data['corona_result'] == 'Negative'])]
-df = df.sort_values(by = ['Count'], ascending = False)
+# Count number of Samples
+print('Number of Duplicated Samples: %d'%(data.duplicated().sum()))
+print('Number of Total Samples: %d'%(data.isnull().value_counts()))
 
-fig = px.bar(df, x = 'corona_result', y = 'Count', 
-             color = "corona_result", text_auto='', width = 600, 
-             color_discrete_sequence = ["orange", "purple"],
-             template = 'plotly_dark')
 
-fig.update_xaxes(showgrid = False)
-fig.update_yaxes(showgrid = False)
-fig.update_traces(textfont_size = 12, textangle = 0, textposition = "outside", cliponaxis = False)
-
-#fig.show()
-
+#  Show Image Samples
 data['image'] = data['path'].map(lambda x: np.asarray(Image.open(x).resize((75,75))))
 
 data.head()
@@ -94,10 +68,7 @@ for n_axs, (type_name, type_rows) in zip(m_axs, data.sort_values(['corona_result
         c_ax.axis('off')
 
 
-
-#print('Number of Duplicated Samples: %d'%(data.duplicated().sum()))
-#print('Number of Total Samples: %d'%(data.isnull().value_counts()))
-
+# Data Augmentation
 
 def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
     
@@ -111,6 +82,26 @@ def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
         myaxes[i // ncols][i % ncols].set_title(title, fontsize = 15)
         
     plt.show()
+
+
+
+image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png")
+
+albumentation_list = [A.RandomFog(p = 1), A.RandomBrightness(p = 1),
+                      A.RandomCrop(p = 1,height = 199, width = 199), A.Rotate(p = 1, limit = 90),
+                      A.RGBShift(p = 1), A.VerticalFlip(p = 1), A.RandomContrast(limit = 0.5, p = 1)]
+
+img_matrix_list = []
+bboxes_list = []
+for aug_type in albumentation_list:
+    img = aug_type(image = image_example)['image']
+    img_matrix_list.append(img)
+
+img_matrix_list.insert(0,image_example)    
+
+titles_list = ["Original", "RandomFog", "RandomBrightness", "RandomCrop", "Rotate", "RGBShift", "VerticalFlip", "RandomContrast"]
+
+plot_multiple_img(img_matrix_list, titles_list, ncols = 4, main_title = "Different Types of Augmentations")
 
 
 all_data = []
@@ -170,14 +161,14 @@ n_classes= 4
 
 cnn = create_model(n_classes, input_shape)
 cnn.summary()
-cnn.fit(x_train, y_train, batch_size=64, epochs= 1, verbose=1)
+cnn.fit(x_train, y_train, batch_size=64, epochs= 10, verbose=1)
 cnn.save('cnn_model.h5', save_format='h5')
 
 es = tf.keras.callbacks.EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1, patience = 4)
 
 #tf.random.set_seed(42)
 history = cnn.fit(x_train, y_train, 
-                        epochs = 1, batch_size = 256,  
+                        epochs = 10, batch_size = 256,  
                         validation_data = (x_val, y_val), 
                         callbacks = [es])
 
@@ -376,6 +367,7 @@ for i in img_path:
     print("Image", img_path.index(i) + 1, ":", z)
 
 
+<<<<<<< HEAD
 
 
 ##
@@ -482,3 +474,6 @@ explanation = cem.explain(X)
 print('Pertinent positive prediction: {}'.format(explanation.PP_pred))
 plt.imshow(explanation.PP.reshape(70, 70, 3))
 plt.show()
+=======
+#https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl
+>>>>>>> 4615aca52c5aa73c72e63f6186d4d5f9bed0d408

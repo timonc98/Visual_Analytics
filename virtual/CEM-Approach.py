@@ -152,7 +152,7 @@ def cnn_model():
 
 cnn = cnn_model()
 cnn.summary()
-cnn.fit(x_train, y_train, batch_size=64, epochs=5, verbose=1)
+cnn.fit(x_train, y_train, batch_size=128, epochs=20, verbose=1)
 cnn.save('mnist_cnn.h5', save_format='h5')
 
 cnn = load_model('mnist_cnn.h5')
@@ -178,7 +178,7 @@ def ae_model():
 
 ae = ae_model()
 ae.summary()
-ae.fit(x_train, x_train, batch_size=128, epochs=5, validation_data=(x_test, x_test), verbose=0)
+ae.fit(x_train, x_train, batch_size=128, epochs=20, validation_data=(x_test, x_test), verbose=0)
 ae.save('mnist_ae.h5', save_format='h5')
 
 ae = load_model('mnist_ae.h5')
@@ -213,7 +213,7 @@ beta = .1
 gamma = 100  
 c_init = 1.  
               
-c_steps = 10 
+c_steps = 1 
 max_iterations = 1000  
 feature_range = (x_train.min(),x_train.max())  
 clip = (-1000.,1000.)  
