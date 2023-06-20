@@ -1,5 +1,9 @@
 from PIL import Image
 
-image_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png"
-image = Image.open(image_path)
-image.show()
+import cv2
+
+custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"
+image = cv2.imread(custom_image)
+height, width, channels = image.shape
+
+print("Bildgröße: {}x{}x{}".format(width, height, channels))
