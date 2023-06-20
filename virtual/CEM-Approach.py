@@ -30,7 +30,11 @@ print('Eager execution enabled: ', tf.executing_eagerly())
 
 # Get Data
 levels = ['Normal', 'COVID']
-path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
+#Marcel Dateipfad
+#path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
+
+#Timon Dateipfad
+path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset"
 data_dir = os.path.join(path)
 
 data = []

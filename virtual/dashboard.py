@@ -155,7 +155,7 @@ def main():
             image_top_right = Image.open(image_top_right_path)
             st.image(image_top_right, width=150)
             st.text("Beschreibung für Bild rechts oben")
-
+        
         # Bilder in der mittleren Zeile
         with col1:
             st.header("Originalbild")
@@ -229,7 +229,7 @@ def main():
             image_top_right = Image.open(image_top_right_path)
             st.image(image_top_right, width=150)
             st.text("Beschreibung für Bild rechts oben")
-
+        
         # Bilder in der mittleren Zeile
         with col1:
             st.header("Originalbild")

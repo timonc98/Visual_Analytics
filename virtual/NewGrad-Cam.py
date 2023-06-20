@@ -42,7 +42,11 @@ import matplotlib.cm as cm
 
 # Get Data
 levels = ['Normal', 'COVID']
-path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
+#Marcel Dateipfad
+#path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
+
+#Timon Dateipfad
+path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset"
 data_dir = os.path.join(path)
 
 data = []
@@ -320,6 +324,11 @@ imag = []
 last_conv_layer_name = "block14_sepconv2_act"
 
 # Reading 2 Covid & 2 Normal Images for Grad-Cam Analysis
+#Marcel Dateipfad
+# img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
+#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
+#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
+#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
 
 img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1002.png",
                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1001.png",
@@ -416,9 +425,5 @@ for j in range(len(z)):
     #print(img_path)
     print("Image", img_path.index(i) + 1, ":", z)
 
-
-title = "Predicted as:"
-
-plot_multiple_img(imag, title, ncols = 4, main_title = "GRAD-CAM COVID-19 Image Analysis")
 
 #https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl
