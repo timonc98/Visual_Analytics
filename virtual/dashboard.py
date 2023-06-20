@@ -1,5 +1,7 @@
 # For running of streamlit, please use the command --   streamlit run "D:Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics\virtual\dashboard.py"
 #Wichtig mit "" um den Verzeichnisort !!!
+# For running of streamlit, please use the command --   streamlit run "C:\Hochschule Aalen\Visual Analytics\Visual_Analytics\virtual\dashboard.py"
+#Wichtig mit "" um den Verzeichnisort !!!
 ##
 ##
 ##python -m streamlit run "D:\Daten-Marcel\2.Fachsemester\01_Visual Analytics\Projekt\Visual_Analytics\virtual\dashboard.py"
@@ -9,7 +11,7 @@ from PIL import Image
 
 def main():
     st.set_page_config(layout="wide")
-    #im = Image.open("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/covid-19.png")
+    image = Image.open("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/covid-19.png")
     # Accordion-Widget für Seitenauswahl
     with st.sidebar:
         st.markdown("<h1 style='text-align: center;'>Virtual Analytics</h1>", unsafe_allow_html=True)
@@ -31,6 +33,7 @@ def main():
         # Counterplot Dataset
         st.subheader("Counterplot Data:")
         image = Image.open('D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Testbilder/Counterplot Covid-19 Dataset.png')
+        #image = Image.open('C:\Hochschule Aalen\Visual Analytics\Visual_Analytics\virtual\Dashboard_Images\plot.png')
         col1, col2, col3 = st.columns(3)
         with col1:
             st.write(' ')
@@ -48,6 +51,7 @@ def main():
         st.markdown("<h1 style='text-align: center; text-decoration: :microbe: underline;'>Visual Analytics</h1>", unsafe_allow_html=True)
         st.header("Covid-19 Beispiel 1 :microbe:")
         st.subheader("Data Augmentation")
+        #image = Image.open("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Testbilder/Augmentations.png")
         image = Image.open("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Testbilder/Augmentations.png")
         st.image(image, caption='Data Augmentation')
         # Spaltenaufteilung des Dashboards
