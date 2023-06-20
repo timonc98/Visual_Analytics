@@ -1,5 +1,7 @@
 # For running of streamlit, please use the command --   streamlit run "D:Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics\virtual\dashboard.py"
 #Wichtig mit "" um den Verzeichnisort !!!
+##
+##
 ##python -m streamlit run "D:\Daten-Marcel\2.Fachsemester\01_Visual Analytics\Projekt\Visual_Analytics\virtual\dashboard.py"
 
 import streamlit as st
@@ -39,12 +41,7 @@ def main():
         with col3:
             st.write(' ')
 
-
-        # Distribution
-        
-
-        
-
+       
 
     if page == "Beispiel 1":
         # Titel des Dashboards
