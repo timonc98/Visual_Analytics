@@ -195,7 +195,7 @@ plt.show()
 import cv2
 
 # Laden Sie das gewünschte Bild
-custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-38.png"
+custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
 
 # Laden und Skalieren des Bildes auf 70x70 Pixel
 X = cv2.imread(custom_image)
@@ -205,11 +205,12 @@ X = cv2.resize(X, (70, 70))
 X = X.reshape((1, 70, 70, 3))
 X = X.astype(np.float32) / 255.
 
-shape = X.shape
+
 
 # Der Code hier bleibt unverändert
 cnn.predict(X).argmax(), cnn.predict(X).max()
 
+shape = X.shape
 mode = 'PN' 
 kappa = 0. 
 beta = .1 

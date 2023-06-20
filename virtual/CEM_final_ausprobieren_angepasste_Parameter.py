@@ -22,6 +22,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from alibi.explainers import CEM
+import tensorflow as tf
+tf.keras.backend.clear_session()
 
 # Get Data
 levels = ['Normal', 'COVID']
@@ -142,32 +144,30 @@ X = X.astype(np.float32) / 255.
 
 shape = X.shape
 
-# Der Code hier bleibt unverändert
+
 cnn.predict(X).argmax(), cnn.predict(X).max()
 
-mode = 'PN'  # 'PN' (pertinent negative) or 'PP' (pertinent positive)
-shape = (1,) + x_train.shape[1:]  # instance shape
-kappa = .2  # minimum difference needed between the prediction probability for the perturbed instance on the
-            # class predicted by the original instance and the max probability on the other classes 
-            # in order for the first loss term to be minimized
-beta = .1  # weight of the L1 loss term
-c_init = 10.  # initial weight c of the loss term encouraging to predict a different class (PN) or 
-              # the same class (PP) for the perturbed instance compared to the original instance to be explained
-c_steps = 10  # nb of updates for c
-max_iterations = 1000  # nb of iterations per value of c
-feature_range = (x_train.min(axis=0).reshape(shape)-.1,  # feature range for the perturbed instance
-                 x_train.max(axis=0).reshape(shape)+.1)  # can be either a float or array of shape (1xfeatures)
-clip = (-1000.,1000.)  # gradient clipping
-lr = 1e-2  # initial learning rate
-no_info_val = -1.  # Example value for no_info_val
+shape = X.shape
+mode = 'PN' 
+kappa = 0. 
+beta = .1 
+gamma = 100  
+c_init = 1.  
+              
+c_steps = 1 
+max_iterations = 1000  
+# feature_range = (x_train.min(axis=0).reshape(shape)-.4,  # feature range for the perturbed instance
+#                  x_train.max(axis=0).reshape(shape)+.1)  
+feature_range = (x_train.min(),x_train.max())  
+clip = (-1000.,1000.)  
+lr = 1e-2  
+no_info_val = -1. 
 
-# cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
-#           gamma=gamma, ae_model=ae, max_iterations=max_iterations,
-#           c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
 
-cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range, 
-          max_iterations=max_iterations, c_init=c_init, c_steps=c_steps, 
-          learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
+cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
+          gamma=gamma, ae_model=ae, max_iterations=max_iterations,
+          c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
+
 
 explanation = cem.explain(X, verbose=False)
 
@@ -184,17 +184,24 @@ else:
     print("Kein Pertinent Negative gefunden.")
 
 mode = 'PP'
-
-# cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
-#           gamma=gamma, ae_model=ae, max_iterations=max_iterations,
-#           c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
-
+shape = X.shape
+kappa = .2  # minimum difference needed between the prediction probability for the perturbed instance on the
+            # class predicted by the original instance and the max probability on the other classes 
+            # in order for the first loss term to be minimized
+beta = .1  # weight of the L1 loss term
+c_init = 10.  # initial weight c of the loss term encouraging to predict a different class (PN) or 
+              # the same class (PP) for the perturbed instance compared to the original instance to be explained
+c_steps = 10  # nb of updates for c
+max_iterations = 2000  # nb of iterations per value of c
+feature_range = (x_train.min(axis=0).reshape(shape)-.1,  # feature range for the perturbed instance
+                 x_train.max(axis=0).reshape(shape)+.1)  # can be either a float or array of shape (1xfeatures)
+clip = (-1000.,1000.)  # gradient clipping
+lr = 1e-2  # initial learning rate
+no_info_val = -1.  # Example value for no_info_val
 
 cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range, 
           max_iterations=max_iterations, c_init=c_init, c_steps=c_steps, 
           learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
-
-
 
 explanation = cem.explain(X)
 
