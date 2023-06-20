@@ -195,7 +195,7 @@ plt.show()
 import cv2
 
 # Laden Sie das gewünschte Bild
-custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-416.png"
+custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-38.png"
 
 # Laden und Skalieren des Bildes auf 70x70 Pixel
 X = cv2.imread(custom_image)

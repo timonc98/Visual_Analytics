@@ -13,15 +13,19 @@ import cv2
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 import os
 from glob import glob
 from PIL import Image
+
 import matplotlib 
 #%matplotlib inline
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 from alibi.explainers import CEM
+
+
 
 # Get Data
 levels = ['Normal', 'COVID']
@@ -105,32 +109,21 @@ x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 
 
 print(x_train.shape, x_test.shape, x_val.shape, y_train.shape, y_test.shape, y_val.shape)
 
-# Laden Sie die Modelle
-ae = keras.models.load_model('covid_ae.h5')
-cnn = keras.models.load_model('covid_cnn.h5')
 
-decoded_imgs = ae.predict(x_test)
-
-
-n = 5
-plt.figure(figsize=(70, 3))
-for i in range(1, n+1):
-    # display original
-    ax = plt.subplot(2, n, i)
-    plt.imshow(x_test[i].reshape(70, 70, 3))
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-    # display reconstruction
-    ax = plt.subplot(2, n, i + n)
-    plt.imshow(decoded_imgs[i].reshape(70, 70, 3))
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-plt.show()
-
+def lr_model():
+    x_in = Input(shape=(4,))
+    x_out = Dense(3, activation='softmax')(x_in)
+    lr = Model(inputs=x_in, outputs=x_out)
+    lr.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+    return lr
+lr = lr_model()
+lr.summary()
+lr.fit(x_train, y_train, batch_size=16, epochs=5, verbose=0)
+lr.save('covid_lr.h5', save_format='h5')
 
 
 # Laden Sie das gewünschte Bild
-custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-828.png"
+custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-416.png"
 
 # Laden und Skalieren des Bildes auf 70x70 Pixel
 X = cv2.imread(custom_image)
@@ -142,27 +135,33 @@ X = X.astype(np.float32) / 255.
 
 shape = X.shape
 
-# Der Code hier bleibt unverändert
-cnn.predict(X).argmax(), cnn.predict(X).max()
 
-mode = 'PN' 
-kappa = 0. 
-beta = .1 
-gamma = 100  
-c_init = 1.  
-              
-c_steps = 1 
-max_iterations = 1000  
-feature_range = (x_train.min(),x_train.max())  
-clip = (-1000.,1000.)  
-lr = 1e-2  
-no_info_val = -1. 
+#CEM Parameter
+mode = 'PN'  # 'PN' (pertinent negative) or 'PP' (pertinent positive)
+kappa = .2  # minimum difference needed between the prediction probability for the perturbed instance on the
+            # class predicted by the original instance and the max probability on the other classes 
+            # in order for the first loss term to be minimized
+beta = .1  # weight of the L1 loss term
+c_init = 10.  # initial weight c of the loss term encouraging to predict a different class (PN) or 
+              # the same class (PP) for the perturbed instance compared to the original instance to be explained
+c_steps = 10  # nb of updates for c
+max_iterations = 1000  # nb of iterations per value of c
+feature_range = (x_train.min(axis=0).reshape(shape)-.1,  # feature range for the perturbed instance
+                 x_train.max(axis=0).reshape(shape)+.1)  # can be either a float or array of shape (1xfeatures)
+clip = (-1000.,1000.)  # gradient clipping
+lr_init = 1e-2  # initial learning rate
 
-cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
-          gamma=gamma, ae_model=ae, max_iterations=max_iterations,
-          c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
+
+# define model
+lr = load_model('covid_lr.h5')
+
+# initialize CEM explainer and explain instance
+cem = CEM(lr, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range, 
+          max_iterations=max_iterations, c_init=c_init, c_steps=c_steps, 
+          learning_rate_init=lr_init, clip=clip)
 
 explanation = cem.explain(X, verbose=False)
+
 
 if explanation.PN_pred is not None:
     index_pn = explanation.PN_pred.argmax()
@@ -176,11 +175,12 @@ if explanation.PN is not None:
 else:
     print("Kein Pertinent Negative gefunden.")
 
+
 mode = 'PP'
 
-cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
-          gamma=gamma, ae_model=ae, max_iterations=max_iterations,
-          c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
+cem = CEM(lr, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range, 
+          max_iterations=max_iterations, c_init=c_init, c_steps=c_steps, 
+          learning_rate_init=lr_init, clip=clip)
 
 explanation = cem.explain(X)
 
