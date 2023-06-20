@@ -1,6 +1,21 @@
 
 #https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl/notebook
 # Import Libraries
+
+'''Frageb Dozent:
+- Daten Satz hat eigentlich vier Klassen, für Model werden aber nur zwei Klassen berücksichtigt
+'''
+
+
+
+
+
+
+
+
+
+
+
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import os
@@ -15,7 +30,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from keras.utils import load_img, img_to_array, array_to_img
-from tensorflow.keras import layers, models
+from keras.layers import Conv2D, Dense, Dropout, Flatten, MaxPooling2D, Input, UpSampling2D
+from keras.models import Model, load_model
+from keras.utils import to_categorical 
 import tensorflow as tf
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report, recall_score, accuracy_score, precision_score, f1_score
@@ -64,8 +81,7 @@ for n_axs, (type_name, type_rows) in zip(m_axs, data.sort_values(['corona_result
         c_ax.axis('off')
 
 
-# Data Augmentation
-
+# Multi-Plot Visualization
 def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
     
     fig, myaxes = plt.subplots(figsize = (15, 8), nrows = 2, ncols = ncols, squeeze = False)
@@ -79,9 +95,9 @@ def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
         
     plt.show()
 
+# Data Augmentation
 
-
-image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png")
+image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1002.png")
 
 albumentation_list = [A.RandomFog(p = 1), A.RandomBrightness(p = 1),
                       A.RandomCrop(p = 1,height = 199, width = 199), A.Rotate(p = 1, limit = 90),
@@ -122,14 +138,45 @@ x = np.array(x)
 y = np.array(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
-x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.1, random_state = 42)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.2, random_state = 42)
 
 print(x_train.shape, x_test.shape, x_val.shape, y_train.shape, y_test.shape, y_val.shape)
 
+# CNN-Model Definition
+def cnn_model():
+    x_in = Input(shape=(70, 70, 3))
+    x = Conv2D(filters=32, kernel_size=2, padding='same', activation='relu')(x_in)
+    x = MaxPooling2D(pool_size=2)(x)
+    x = Dropout(0.2)(x)
 
+    x = Conv2D(filters=16, kernel_size=2, padding='same', activation='relu')(x)
+    x = MaxPooling2D(pool_size=2)(x)
+    x = Dropout(0.2)(x)
 
+    x = Conv2D(filters=4, kernel_size=2, padding='same', activation='relu')(x)
+    x = MaxPooling2D(pool_size=2)(x)
+    x = Dropout(0.2)(x)
 
+    x = Flatten()(x)
+    x = Dense(256, activation='relu')(x)
+    x = Dropout(0.2)(x)
+    x_out = Dense(10, activation='softmax')(x)
 
+    cnn = Model(inputs=x_in, outputs=x_out)
+    cnn.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits = True), optimizer='adam', metrics=['accuracy'])
+
+    return cnn
+
+cnn = cnn_model()
+cnn.summary()
+cnn.fit(x_train, y_train, batch_size=128, epochs=3, verbose=1)
+cnn.save('covid_cnn.h5', save_format='h5')
+
+cnn = load_model('covid_cnn.h5')
+score = cnn.evaluate(x_test, y_test, verbose=0)
+print('Test accuracy: ', score[1])
+
+'''
 def create_model(n_classes, train_shape):
     cnn_model = models.Sequential()
     cnn_model.add(layers.Conv2D(filters = 128, kernel_size = (3, 3), activation = 'relu', input_shape = (70, 70, 3)))
@@ -157,17 +204,21 @@ n_classes= 4
 
 cnn = create_model(n_classes, input_shape)
 cnn.summary()
-cnn.fit(x_train, y_train, batch_size=64, epochs= 10, verbose=1)
+cnn.fit(x_train, y_train, batch_size=64, epochs= 1, verbose=1)
 cnn.save('cnn_model.h5', save_format='h5')
 
 es = tf.keras.callbacks.EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1, patience = 4)
 
+'''
+
+
 #tf.random.set_seed(42)
+'''
 history = cnn.fit(x_train, y_train, 
-                        epochs = 10, batch_size = 256,  
+                        epochs = 1, batch_size = 256,  
                         validation_data = (x_val, y_val), 
                         callbacks = [es])
-
+'''
 yp_train = cnn.predict(x_train)
 yp_train = np.argmax(yp_train, axis = 1)
 
@@ -176,7 +227,7 @@ yp_val = np.argmax(yp_val, axis = 1)
 
 yp_test = cnn.predict(x_test)
 yp_test = np.argmax(yp_test, axis = 1)
-
+'''
 def evaluation_parametrics(name, y_train, yp_train, y_val, yp_val, y_test, yp_test):
     
     print("\n-----------------------------{}-----------------------------\n".format(name))
@@ -259,7 +310,7 @@ plt.title('Model Accuracy/Loss')
 plt.ylabel('Accuracy/Loss')
 plt.xlabel('Epoch')
 plt.show()
-
+'''
 model_builder = keras.applications.xception.Xception
 img_size = (299, 299)
 preprocess_input = keras.applications.xception.preprocess_input
@@ -270,11 +321,13 @@ last_conv_layer_name = "block14_sepconv2_act"
 
 # Reading 2 Covid & 2 Normal Images for Grad-Cam Analysis
 
-img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
-                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
+img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1002.png",
+                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1001.png",
+                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-1001.png",
+                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-1002.png"]
 
+
+#img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
 # To Get Image into numpy array
 
 def get_img_array(img_path, size):
@@ -341,9 +394,6 @@ def save_and_display_gradcam(img_path, heatmap, cam_path = "cam.jpg", alpha = 0.
 for i in range(len(img_path)):
     save_and_display_gradcam(img_path[i], covid_noncovid_heatmap[i])
 
-titles_list = ["Positive-1",'Positive-1 Grad','Positive-2','Positive-2 Grad','Negative-1','Negative-1 Grad','Negative-2','Negative-2 Grad']
-
-plot_multiple_img(imag, titles_list, ncols = 4, main_title = "GRAD-CAM COVID-19 Image Analysis")
 
 # Checking predictions for the above sample images
 
@@ -351,10 +401,24 @@ for i in img_path:
     z_img = cv2.imread(i)
     z_img = cv2.resize(z_img, (70, 70)) / 255.0
     z_img = z_img.reshape(1, z_img.shape[0], z_img.shape[1], z_img.shape[2])
-    
     z = cnn.predict(z_img)
     z = np.argmax(z, axis = 1)
+
+for j in range(len(z)):
+    z = list(map(str, z))
+    if z[j] == '0':
+            z[j] = 'Normal'
+    else:
+        z[j] = "Covid"
+    #z[z==0]="Normal"
+    #z[z==1]="Covid"
+    #z = z.replace(1, "Covid")
+    #print(img_path)
     print("Image", img_path.index(i) + 1, ":", z)
 
+
+title = "Predicted as:"
+
+plot_multiple_img(imag, title, ncols = 4, main_title = "GRAD-CAM COVID-19 Image Analysis")
 
 #https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl
