@@ -139,7 +139,7 @@ def cnn_model():
 
 cnn = cnn_model()
 cnn.summary()
-cnn.fit(x_train, y_train, batch_size=128, epochs=1, verbose=1)
+cnn.fit(x_train, y_train, batch_size=128, epochs=3, verbose=1)
 cnn.save('covid_cnn.h5', save_format='h5')
 
 cnn = load_model('covid_cnn.h5')
@@ -166,85 +166,12 @@ def ae_model():
 
 ae = ae_model()
 ae.summary()
-ae.fit(x_train, x_train, batch_size=128, epochs=1, validation_data=(x_test, x_test), verbose=0)
+ae.fit(x_train, x_train, batch_size=128, epochs=3, validation_data=(x_test, x_test), verbose=0)
 ae.save('covid_ae.h5', save_format='h5')
 
 ae = load_model('covid_ae.h5')
 
-
-
-from keras.utils import load_img, img_to_array, array_to_img
-
-
-# img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1002.png",
-#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1001.png",
-#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-1001.png",
-#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-1002.png"]
-
-img_path = ["C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
-                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
-                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
-                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
-
-
-model_builder = keras.applications.xception.Xception
-img_size = (70, 70)
-preprocess_input = keras.applications.xception.preprocess_input
-imag = []
-
-
-def get_img_array(img_path, size):
-    img = load_img(img_path, target_size = size) 
-    array = img_to_array(img)
-    array = np.expand_dims(array, axis = 0)
-    return array
-
-def save_and_display_images(img_path, cam_path = "cam.jpg"):
-    img = load_img(img_path)
-    img = img_to_array(img)
-
-    superimposed_img = img
-    superimposed_img = array_to_img(superimposed_img)
-    superimposed_img.save(cam_path)
-    
-    imag.append(cv2.imread(img_path))
-    imag.append(cv2.imread("./cam.jpg"))
-
-for i in range(len(img_path)):
-    save_and_display_images(img_path[i])
-
-for i in img_path:
-    img_array = preprocess_input(get_img_array(i, size = img_size))
-    model = model_builder(weights = "imagenet")
-    model.layers[-1].activation = None
-    decoded_imgs = model.predict(img_array)
-
-#decoded_imgs = ae.predict(img_array)
-
-n = 4
-plt.figure(figsize=(70, 3))
-for i in range(1, n+1):
-    # display original
-    ax = plt.subplot(2, n, i)
-    plt.imshow(img_array[i].reshape(70, 70, 3))
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-    # display reconstruction
-    ax = plt.subplot(2, n, i + n)
-    plt.imshow(decoded_imgs[i].reshape(70, 70, 3))
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-plt.show()
-
-
-
-
-
-'''
 decoded_imgs = ae.predict(x_test)
-
-print("Test")
-print(decoded_imgs)
 
 
 n = 5
@@ -261,21 +188,10 @@ for i in range(1, n+1):
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
 plt.show()
-'''
 
-#Sample Pictures
 
 idx = 1
-#sample_test = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1002.png",
-#                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1001.png",
-#                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-1001.png",
-#                      "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-1002.png"]
-#sample_test= np.array(sample_test)
-X = img_array[idx].reshape((1,) + img_array[idx].shape) #(1,28,28,1)
-
-#X = x_test[idx].reshape((1,) + x_test[idx].shape) #(1,28,28,1)
-#X = sample_test[idx].reshape((1,) + sample_test[idx].shape) #(1,28,28,1)
-
+X = x_test[idx].reshape((1,) + x_test[idx].shape) #(1,28,28,1)
 
 plt.imshow(X.reshape(70, 70, 3))
 
@@ -294,6 +210,7 @@ feature_range = (x_train.min(),x_train.max())
 clip = (-1000.,1000.)  
 lr = 1e-2  
 no_info_val = -1. 
+
 cem = CEM(cnn, mode, shape, kappa=kappa, beta=beta, feature_range=feature_range,
           gamma=gamma, ae_model=ae, max_iterations=max_iterations,
           c_init=c_init, c_steps=c_steps, learning_rate_init=lr, clip=clip, no_info_val=no_info_val)
@@ -315,5 +232,3 @@ explanation = cem.explain(X)
 print('Pertinent positive prediction: {}'.format(explanation.PP_pred))
 plt.imshow(explanation.PP.reshape(70, 70, 3))
 plt.show()
-
-

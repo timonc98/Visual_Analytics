@@ -20,7 +20,7 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn.model_selection import train_test_split
 #from keras.preprocessing import image
 from keras.utils import load_img, img_to_array, array_to_img
-from tensorflow.keras import layers, models
+from keras import layers, models
 import tensorflow as tf
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report, recall_score, accuracy_score, precision_score, f1_score
 
