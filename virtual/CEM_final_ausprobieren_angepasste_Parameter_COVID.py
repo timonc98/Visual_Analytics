@@ -154,11 +154,10 @@ beta = .1
 gamma = 100  
 c_init = 1.  
               
-c_steps = 1 
+c_steps = 10 
 max_iterations = 1000  
-# feature_range = (x_train.min(axis=0).reshape(shape)-.4,  # feature range for the perturbed instance
-#                  x_train.max(axis=0).reshape(shape)+.1)  
-feature_range = (x_train.min(),x_train.max())  
+feature_range = (x_train.min(axis=0).reshape(shape)-.1,  # feature range for the perturbed instance
+                 x_train.max(axis=0).reshape(shape)+.1)    
 clip = (-1000.,1000.)  
 lr = 1e-2  
 no_info_val = -1. 
@@ -175,7 +174,7 @@ if explanation.PN_pred is not None:
     index_pn = explanation.PN_pred.argmax()
     image_path_pn = data['path'].iloc[index_pn]
 else:
-    print("CEM-Erklärung für Pertinent Negative war nicht erfolgreich.")
+    print("CEM-Erklärung für Pertinent Neative war nicht erfolgreich.")
 
 if explanation.PN is not None:
     plt.imshow(explanation.PN.reshape(70, 70, 3))
