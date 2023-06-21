@@ -12,10 +12,8 @@ from PIL import Image
 def main():
     st.set_page_config(layout="wide")
     image = Image.open("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/covid-19.png")
-
     st.sidebar.image(image, use_column_width=True)
     st.sidebar.markdown("<h1 style='text-align: center; text-decoration: underline;'>Visual Analytics</h1>", unsafe_allow_html=True)
-    
     st.sidebar.markdown("<h3 style='text-align: center;'>Seiten auswählen:</h3>", unsafe_allow_html=True)
 
     pages = {
@@ -25,6 +23,7 @@ def main():
     selected_page = st.sidebar.radio("", list(pages.keys()))
 
     if selected_page == "Allgemein":
+        
         st.markdown("<h1 style='text-align: center; text-decoration: underline; margin-top: 0; padding_top: 0;'>Visual Analytics</h1>", unsafe_allow_html=True)
         st.header("Allgemeine Daten :microbe:")
         st.subheader("Source Dataset:")
@@ -52,7 +51,7 @@ def main():
             st.image(image_augmentation, caption='Data Augmentation')
 
     elif selected_page == "Interface":
-        selected_example = st.selectbox("Interface auswählen:", ["Interface 1", "Interface 2", "Interface 3"])
+        selected_example = st.selectbox("", ["Interface 1", "Interface 2", "Interface 3"])
         if selected_example == "Interface 1":
             st.header("Covid-19 Interface 1 :microbe:")
             # Spaltenaufteilung des Dashboards
