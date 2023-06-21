@@ -102,7 +102,7 @@ def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
 # Data Augmentation
 
 # image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png")
-image_example = cv2.imread("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png")
+image_example = cv2.imread("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-19.png")
 
 albumentation_list = [A.RandomFog(p = 1), A.RandomBrightness(p = 1),
                       A.RandomCrop(p = 1,height = 199, width = 199), A.Rotate(p = 1, limit = 90),
@@ -175,9 +175,9 @@ def cnn_model():
 cnn = cnn_model()
 cnn.summary()
 cnn.fit(x_train, y_train, batch_size=128, epochs=3, verbose=1)
-cnn.save('covid_cnn.h5', save_format='h5')
+cnn.save('covid_cnn_grad.h5', save_format='h5')
 
-cnn = load_model('covid_cnn.h5')
+cnn = load_model('covid_cnn_grad.h5')
 score = cnn.evaluate(x_test, y_test, verbose=0)
 print('Test accuracy: ', score[1])
 
@@ -331,10 +331,10 @@ last_conv_layer_name = "block14_sepconv2_act"
 #                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
 #                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
 
-img_path = ["C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png",
+img_path = ["C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10.png",
                       "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-19.png",
                       "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-210.png",
-                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-215.png"]
+                      "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"]
 
 
 #img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
@@ -380,7 +380,7 @@ for i in img_path:
 
 # To Display GradCAM output for the samples
 
-def save_and_display_gradcam(img_path, heatmap, cam_path = "cam.jpg", alpha = 0.4):
+def save_and_display_gradcam(img_path, heatmap, cam_path = "cam2.jpg", alpha = 0.4):
     img = load_img(img_path)
     img = img_to_array(img)
 
@@ -398,7 +398,7 @@ def save_and_display_gradcam(img_path, heatmap, cam_path = "cam.jpg", alpha = 0.
     superimposed_img.save(cam_path)
     
     imag.append(cv2.imread(img_path))
-    imag.append(cv2.imread("./cam.jpg"))
+    imag.append(cv2.imread("./cam2.jpg"))
 
 
 for i in range(len(img_path)):

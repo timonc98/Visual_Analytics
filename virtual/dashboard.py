@@ -20,7 +20,7 @@ def main():
 
     pages = {
         "Allgemein": "Allgemein",
-        "Beispiele": "Beispiele"
+        "Interface": "Interface"
     }
     selected_page = st.sidebar.radio("", list(pages.keys()))
 
@@ -41,7 +41,7 @@ def main():
             st.write(' ')
 
         with col2:
-            st.image(image, caption='Counter Plot Covid-19 Database')
+            st.image(image, width=300)
 
         with col3:
             st.write(' ')
@@ -51,10 +51,10 @@ def main():
             image_augmentation = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Augmentations.png')
             st.image(image_augmentation, caption='Data Augmentation')
 
-    elif selected_page == "Beispiele":
-        selected_example = st.selectbox("Beispiel auswählen:", ["Beispiel 1", "Beispiel 2", "Beispiel 3"])
-        if selected_example == "Beispiel 1":
-            st.header("Covid-19 Beispiel 1 :microbe:")
+    elif selected_page == "Interface":
+        selected_example = st.selectbox("Interface auswählen:", ["Interface 1", "Interface 2", "Interface 3"])
+        if selected_example == "Interface 1":
+            st.header("Covid-19 Interface 1 :microbe:")
             # Spaltenaufteilung des Dashboards
             col1, col2, col3 = st.columns([3, 3, 3])
             
@@ -92,7 +92,7 @@ def main():
                 st.subheader("Pertinent Negatives")
                 image_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PN.png"
                 image_middle = Image.open(image_middle_path)
-                st.image(image_middle, width=250)
+                st.image(image_middle, width=400)
                 st.text("Beschreibung für Bild in der Mitte")
 
             with col3:
@@ -102,57 +102,8 @@ def main():
                 st.image(image_middle_right, width=250)
                 st.text("Beschreibung für Bild rechts in der Mitte")
 
-        elif selected_example == "Beispiel 2":
-            st.header("Covid-19 Beispiel 2 :microbe:")
-            # Spaltenaufteilung des Dashboards
-            col1, col2, col3 = st.columns([3, 3, 3])
-            
-            # Bilder in der oberen Zeile
-            with col1:
-                st.subheader("Original")
-                image_top_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
-                image_top_left = Image.open(image_top_left_path)
-                st.image(image_top_left, width=250)
-                st.text("Labeled as: Normal")
-
-            with col2:
-                st.subheader("Grad-CAM")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
-                image_top_middle = Image.open(image_top_middle_path)
-                st.image(image_top_middle, width=150)
-                st.text("Predicted as: Normal")
-
-            with col3:
-                st.subheader("Pertinent Positives")
-                image_top_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
-                image_top_right = Image.open(image_top_right_path)
-                st.image(image_top_right, width=250)
-                st.text("Beschreibung für Bild rechts oben")
-            
-            # Bilder in der mittleren Zeile
-            with col1:
-                st.subheader("Grad-CAM")
-                image_middle_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID_828_Grad_Cam.jpg"
-                image_middle_left = Image.open(image_middle_left_path)
-                st.image(image_middle_left, width=250)
-                st.text("Beschreibung für Bild links in der Mitte")
-
-            with col2:
-                st.subheader("Pertinent Negatives")
-                image_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PN.png"
-                image_middle = Image.open(image_middle_path)
-                st.image(image_middle, width=250)
-                st.text("Beschreibung für Bild in der Mitte")
-
-            with col3:
-                st.subheader("Pertinent Positives")
-                image_middle_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PP.png"
-                image_middle_right = Image.open(image_middle_right_path)
-                st.image(image_middle_right, width=250)
-                st.text("Beschreibung für Bild rechts in der Mitte")
-
-        elif selected_example == "Beispiel 3":
-            st.header("Covid-19 Beispiel 3 :microbe:")
+        elif selected_example == "Interface 2":
+            st.header("Covid-19 Interface 2 :microbe:")
             # Spaltenaufteilung des Dashboards
             col1, col2, col3 = st.columns([3, 3, 3])
             
@@ -190,7 +141,56 @@ def main():
                 st.subheader("Pertinent Negatives")
                 image_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PN.png"
                 image_middle = Image.open(image_middle_path)
-                st.image(image_middle, width=250)
+                st.image(image_middle, width=400)
+                st.text("Beschreibung für Bild in der Mitte")
+
+            with col3:
+                st.subheader("Pertinent Positives")
+                image_middle_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PP.png"
+                image_middle_right = Image.open(image_middle_right_path)
+                st.image(image_middle_right, width=250)
+                st.text("Beschreibung für Bild rechts in der Mitte")
+
+        elif selected_example == "Interface 3":
+            st.header("Covid-19 Interface 3 :microbe:")
+            # Spaltenaufteilung des Dashboards
+            col1, col2, col3 = st.columns([3, 3, 3])
+            
+            # Bilder in der oberen Zeile
+            with col1:
+                st.subheader("Original")
+                image_top_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
+                image_top_left = Image.open(image_top_left_path)
+                st.image(image_top_left, width=250)
+                st.text("Labeled as: Normal")
+
+            with col2:
+                st.subheader("Grad-CAM")
+                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
+                image_top_middle = Image.open(image_top_middle_path)
+                st.image(image_top_middle, width=250)
+                st.text("Predicted as: Normal")
+
+            with col3:
+                st.subheader("Pertinent Positives")
+                image_top_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
+                image_top_right = Image.open(image_top_right_path)
+                st.image(image_top_right, width=250)
+                st.text("Beschreibung für Bild rechts oben")
+            
+            # Bilder in der mittleren Zeile
+            with col1:
+                st.subheader("Grad-CAM")
+                image_middle_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID_828_Grad_Cam.jpg"
+                image_middle_left = Image.open(image_middle_left_path)
+                st.image(image_middle_left, width=250)
+                st.text("Beschreibung für Bild links in der Mitte")
+
+            with col2:
+                st.subheader("Pertinent Negatives")
+                image_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PN.png"
+                image_middle = Image.open(image_middle_path)
+                st.image(image_middle, width=400)
                 st.text("Beschreibung für Bild in der Mitte")
 
             with col3:
