@@ -68,16 +68,16 @@ for n_axs, (type_name, type_rows) in zip(m_axs, data.sort_values(['corona_result
 
 # Multiplot Visualization
 def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
-    
+
     fig, myaxes = plt.subplots(figsize = (15, 8), nrows = 2, ncols = ncols, squeeze = False)
     fig.suptitle(main_title, fontsize = 18)
     fig.subplots_adjust(wspace = 0.3)
     fig.subplots_adjust(hspace = 0.3)
-    
+
     for i, (img, title) in enumerate(zip(img_matrix_list, title_list)):
         myaxes[i // ncols][i % ncols].imshow(img)
         myaxes[i // ncols][i % ncols].set_title(title, fontsize = 15)
-        
+
     plt.show()
 
 
@@ -132,7 +132,7 @@ plt.show()
 
 
 # Laden Sie das gewünschte Bild
-custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-210.png"
+custom_image = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-219.png"
 
 # Laden und Skalieren des Bildes auf 70x70 Pixel
 X = cv2.imread(custom_image)
@@ -185,10 +185,10 @@ kappa = .2  # minimum difference needed between the prediction probability for t
             # class predicted by the original instance and the max probability on the other classes 
             # in order for the first loss term to be minimized
 beta = .1  # weight of the L1 loss term
-c_init = 10.  # initial weight c of the loss term encouraging to predict a different class (PN) or 
+c_init = 1.  # initial weight c of the loss term encouraging to predict a different class (PN) or 
               # the same class (PP) for the perturbed instance compared to the original instance to be explained
 c_steps = 10  # nb of updates for c
-max_iterations = 2000  # nb of iterations per value of c
+max_iterations = 3000  # nb of iterations per value of c
 feature_range = (x_train.min(axis=0).reshape(shape)-.1,  # feature range for the perturbed instance
                  x_train.max(axis=0).reshape(shape)+.1)  # can be either a float or array of shape (1xfeatures)
 clip = (-1000.,1000.)  # gradient clipping
