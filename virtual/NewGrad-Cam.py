@@ -102,7 +102,7 @@ def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
 # Data Augmentation
 
 # image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png")
-image_example = cv2.imread("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-19.png")
+image_example = cv2.imread("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png")
 
 albumentation_list = [A.RandomFog(p = 1), A.RandomBrightness(p = 1),
                       A.RandomCrop(p = 1,height = 199, width = 199), A.Rotate(p = 1, limit = 90),
