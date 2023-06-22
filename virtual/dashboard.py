@@ -27,7 +27,7 @@ def main():
         st.markdown("<h1 style='text-align: center; text-decoration: underline; margin-top: 0; padding_top: 0;'>Visual Analytics</h1>", unsafe_allow_html=True)
         st.header("Allgemeine Daten :microbe:")
         st.subheader ("Teammitglieder:")
-        st.write ("Timon Clauß (76635) & Marcel Dittrich (77777)")
+        st.write ("Timon Clauß (76635) & Marcel Dittrich (76435)")
         st.subheader("Source Dataset:")
 
         # Dataset link
