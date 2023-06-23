@@ -37,18 +37,17 @@ def main():
         # Expander für Data Augmentation
         with st.expander("Counterplot Data:"):
         # Counterplot Dataset
-            st.subheader("Counterplot Data:")
             image = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/plot.png')
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.subheader("Model Accuracy/Loss")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/loss.png"
+                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Accuracy.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=470)
 
             with col2:
                 st.subheader("Model Loss")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Accuracy.png"
+                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/loss.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=470)
 
