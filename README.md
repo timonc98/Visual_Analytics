@@ -51,6 +51,5 @@ seaborn: 0.12.2
 sklearn: 1.2.2
 keras: 2.12.0
 tensorflow: 2.12.0
-sklearn: 1.2.2
 
 Beitragende: Timon Clauß (76635), Marcel Dittrich (76435), Domenik Raab (Dozent)
