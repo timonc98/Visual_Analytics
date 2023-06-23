@@ -41,13 +41,22 @@ def main():
             image = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/plot.png')
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.write(' ')
+                st.subheader("Model Accuracy/Loss")
+                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/loss.png"
+                image_top_middle = Image.open(image_top_middle_path)
+                st.image(image_top_middle, width=470)
 
             with col2:
-                st.image(image, width=300)
+                st.subheader("Model Loss")
+                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Accuracy.png"
+                image_top_middle = Image.open(image_top_middle_path)
+                st.image(image_top_middle, width=470)
 
             with col3:
-                st.write(' ')
+                st.subheader("Mean and standard deviation of Image Samples")
+                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/plot_sd.png"
+                image_top_middle = Image.open(image_top_middle_path)
+                st.image(image_top_middle, width=400)
 
         # Expander für Data Augmentation
         with st.expander("Data Augmentation"):
