@@ -3,7 +3,7 @@ Projektbeschreibung:
 Dieses Projekt befasst sich mit der Erkennung von COVID-positiven Fällen mithilfe von Deep Learning. Das Ziel ist es, ein Modell zu entwickeln, das auf Röntgenbildern von Patienten trainiert wird und in der Lage ist, zwischen COVID-positiven und normalen (negativen) Fällen zu unterscheiden.
 
 Datensatz: 
-Der verwendete Datensatz enthält Röntgenbilder von Patienten mit zwei Klassen: "Normal" und "COVID". Der Datensatz wurde bereits vorverarbeitet und enthält Bilder sowie die entsprechenden Labels.
+Der verwendete Datensatz enthält Röntgenbilder von Patienten mit vier Klassen: "Normal", "Pneumonia", "Lung Opacity" und "COVID". Es wurden allerdings nur die zwei Klassen "Normal" und "COVID" für diese Arbeit verwendet. Der Datensatz wurde bereits vorverarbeitet und enthält Bilder sowie die entsprechenden Labels.
 https://www.kaggle.com/datasets/tawsifurrahman/covid19-radiography-database
 
 Vorgehensweise:
@@ -51,5 +51,17 @@ seaborn: 0.12.2
 sklearn: 1.2.2
 keras: 2.12.0
 tensorflow: 2.12.0
+
+
+Quellen:
+
+https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl
+https://www.kaggle.com/code/danushkumarv/covid-19-cnn-grad-cam-viz#3-%7C-Exploratory-Data-Analysis
+https://www.kaggle.com/code/smitisinghal/cem-on-mnist
+https://www.kaggle.com/code/smitisinghal/cem-on-fashion-mnist
+https://github.com/IBM/Contrastive-Explanation-Method
+https://github.com/david-knigge/contrastive-explanation-method
+https://keras.io/examples/vision/grad_cam/
+
 
 Beitragende: Timon Clauß (76635), Marcel Dittrich (76435), Domenik Raab (Dozent)

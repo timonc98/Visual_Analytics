@@ -14,7 +14,6 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
-from glob import glob
 from PIL import Image
 import matplotlib 
 #%matplotlib inline
@@ -104,7 +103,7 @@ def cnn_model():
     return cnn
 cnn = cnn_model()
 cnn.summary()
-cnn.fit(x_train, y_train, batch_size=128, epochs=3, verbose=1)
+cnn.fit(x_train, y_train, batch_size=128, epochs=5, verbose=1)
 cnn.save('covid_cnn.h5', save_format='h5')
 cnn = load_model('covid_cnn.h5')
 score = cnn.evaluate(x_test, y_test, verbose=0)
