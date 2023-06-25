@@ -2,20 +2,6 @@
 #https://www.kaggle.com/code/sana306/detection-of-covid-positive-cases-using-dl/notebook
 # Import Libraries
 
-'''Frageb Dozent:
-- Daten Satz hat eigentlich vier Klassen, für Model werden aber nur zwei Klassen berücksichtigt
-'''
-
-
-
-
-
-
-
-
-
-
-
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import os
@@ -43,10 +29,11 @@ import matplotlib.cm as cm
 # Get Data
 levels = ['Normal', 'COVID']
 #Marcel Dateipfad
-#path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
+path = "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual\Dataset"
 
 #Timon Dateipfad
-path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset"
+#path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset"
+
 data_dir = os.path.join(path)
 
 data = []
@@ -101,8 +88,8 @@ def plot_multiple_img(img_matrix_list, title_list, ncols, main_title = ""):
 
 # Data Augmentation
 
-# image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png")
-image_example = cv2.imread("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-86.png")
+image_example = cv2.imread("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png")
+#image_example = cv2.imread("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-86.png")
 
 albumentation_list = [A.RandomFog(p = 1), A.RandomBrightness(p = 1),
                       A.RandomCrop(p = 1,height = 199, width = 199), A.Rotate(p = 1, limit = 90),
@@ -119,6 +106,37 @@ img_matrix_list.insert(0,image_example)
 titles_list = ["Original", "RandomFog", "RandomBrightness", "RandomCrop", "Rotate", "RGBShift", "VerticalFlip", "RandomContrast"]
 
 plot_multiple_img(img_matrix_list, titles_list, ncols = 4, main_title = "Different Types of Augmentations")
+
+# Mean and standard deviation
+
+mean_val = []
+std_dev_val = []
+max_val = []
+min_val = []
+
+for i in range(0, samples):
+    mean_val.append(data['image'][i].mean())
+    std_dev_val.append(np.std(data['image'][i]))
+    max_val.append(data['image'][i].max())
+    min_val.append(data['image'][i].min())
+
+imageEDA = data.loc[:,['image','corona_result','path']]
+imageEDA['mean'] = mean_val
+imageEDA['stedev'] = std_dev_val
+imageEDA['max'] = max_val
+imageEDA['min'] = min_val
+
+imageEDA['subt_mean'] = imageEDA['mean'].mean() - imageEDA['mean']
+
+plt.figure(figsize = (10, 10))
+sns.set(style = "ticks", font_scale = 1)
+ax = sns.scatterplot(data = imageEDA, x = "mean", y = imageEDA['stedev'], hue = 'corona_result', alpha = 0.8);
+sns.despine(top = True, right = True, left = False, bottom = False)
+plt.xticks(rotation = 0, fontsize = 12)
+ax.set_xlabel('\nImage Channel Colour Mean', fontsize = 14)
+ax.set_ylabel('Image Channel Colour Standard Deviation', fontsize = 14)
+plt.title('Mean and Standard Deviation of Image Samples', fontsize = 16);
+plt.show()
 
 
 all_data = []
@@ -142,8 +160,8 @@ for image, label in all_data:
 x = np.array(x)
 y = np.array(y)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
-x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.2, random_state = 42)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.1, random_state = 42)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.1, random_state = 42)
 
 print(x_train.shape, x_test.shape, x_val.shape, y_train.shape, y_test.shape, y_val.shape)
 
@@ -158,7 +176,7 @@ def cnn_model():
     x = MaxPooling2D(pool_size=2)(x)
     x = Dropout(0.2)(x)
 
-    x = Conv2D(filters=4, kernel_size=2, padding='same', activation='relu')(x)
+    x = Conv2D(filters=256, kernel_size=2, padding='same', activation='relu')(x)
     x = MaxPooling2D(pool_size=2)(x)
     x = Dropout(0.2)(x)
 
@@ -174,56 +192,14 @@ def cnn_model():
 
 cnn = cnn_model()
 cnn.summary()
-cnn.fit(x_train, y_train, batch_size=128, epochs=3, verbose=1)
+conv_model = cnn.fit(x_train, y_train, batch_size=128, epochs=20, validation_data = (x_val, y_val), verbose=1)
 cnn.save('covid_cnn_grad.h5', save_format='h5')
 
 cnn = load_model('covid_cnn_grad.h5')
 score = cnn.evaluate(x_test, y_test, verbose=0)
 print('Test accuracy: ', score[1])
 
-'''
-def create_model(n_classes, train_shape):
-    cnn_model = models.Sequential()
-    cnn_model.add(layers.Conv2D(filters = 128, kernel_size = (3, 3), activation = 'relu', input_shape = (70, 70, 3)))
-    cnn_model.add(layers.MaxPooling2D((2, 2)))
-    cnn_model.add(layers.Dropout(0.3))
 
-    cnn_model.add(layers.Conv2D(filters = 64, kernel_size = (3, 3), activation = 'relu'))
-    cnn_model.add(layers.MaxPooling2D((2, 2)))
-    cnn_model.add(layers.Dropout(0.5))
-
-    cnn_model.add(layers.Conv2D(filters = 64, kernel_size = (3, 3), activation = 'relu'))
-    cnn_model.add(layers.Flatten())
-    cnn_model.add(layers.Dense(units = 16, activation = 'relu'))
-    cnn_model.add(layers.Dropout(0.2))
-
-    cnn_model.add(layers.Dense(units = 2))
-
-    cnn_model.compile(optimizer = 'adam', 
-            loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits = True), 
-            metrics = ['accuracy'])
-    return cnn_model
-
-input_shape = (70, 70, 3)
-n_classes= 4
-
-cnn = create_model(n_classes, input_shape)
-cnn.summary()
-cnn.fit(x_train, y_train, batch_size=64, epochs= 1, verbose=1)
-cnn.save('cnn_model.h5', save_format='h5')
-
-es = tf.keras.callbacks.EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1, patience = 4)
-
-'''
-
-
-#tf.random.set_seed(42)
-'''
-history = cnn.fit(x_train, y_train, 
-                        epochs = 1, batch_size = 256,  
-                        validation_data = (x_val, y_val), 
-                        callbacks = [es])
-'''
 yp_train = cnn.predict(x_train)
 yp_train = np.argmax(yp_train, axis = 1)
 
@@ -232,66 +208,13 @@ yp_val = np.argmax(yp_val, axis = 1)
 
 yp_test = cnn.predict(x_test)
 yp_test = np.argmax(yp_test, axis = 1)
-'''
-def evaluation_parametrics(name, y_train, yp_train, y_val, yp_val, y_test, yp_test):
-    
-    print("\n-----------------------------{}-----------------------------\n".format(name))
-    
-    cm_train = confusion_matrix(y_train, yp_train)
-    t1 = ConfusionMatrixDisplay(cm_train)
-    s1 = round((cm_train[0,0]/(cm_train[0,0] + cm_train[0,1])),4)
-    
-    print("Classification Report for Train Data\n")
-    print(classification_report(y_train, yp_train)) 
-    print("--------------------------------------------------------------------------")
-    print("Recall on Train Data: ", round(recall_score(y_train, yp_train),4))
-    print("Specificity on Train Data: ", s1)
-    print("Accuracy on Train Data: ", round(accuracy_score(y_train, yp_train),4))
-    print("Precision on Train Data: ", round(precision_score(y_train, yp_train),4))
-    print("F1 Score on Train Data: ", round(f1_score(y_train, yp_train),4))
-    print("--------------------------------------------------------------------------")
-       
-    cm_val = confusion_matrix(y_val, yp_val)
-    t2 = ConfusionMatrixDisplay(cm_val)
-    s2 = round((cm_val[0,0]/(cm_val[0,0] + cm_val[0,1])),4)
-    
-    print("\nClassification Report for Validation Data\n")
-    print(classification_report(y_val, yp_val))   
-    print("--------------------------------------------------------------------------")
-    print("Recall on Val Data: ", round(recall_score(y_val, yp_val),4))
-    print("Specificity on Val Data: ", s2)
-    print("Accuracy on Val Data: ", round(accuracy_score(y_val, yp_val),4))
-    print("Precision on Val Data: ", round(precision_score(y_val, yp_val),4))
-    print("F1 Score on Val Data: ", round(f1_score(y_val, yp_val),4))
-    print("--------------------------------------------------------------------------")
 
-    cm_test = confusion_matrix(y_test, yp_test)
-    t3 = ConfusionMatrixDisplay(cm_test)
-    s3 = round((cm_test[0,0]/(cm_test[0,0] + cm_test[0,1])),4)
-    
-    print("\nClassification Report for Test Data\n")
-    print(classification_report(y_test, yp_test))   
-    print("--------------------------------------------------------------------------")
-    print("Recall on Test Data: ", round(recall_score(y_test, yp_test), 4))
-    print("Specificity on Test Data: ", s3)
-    print("Accuracy on Test Data: ", round(accuracy_score(y_test, yp_test), 4))
-    print("Precision on Test Data: ", round(precision_score(y_test, yp_test), 4))
-    print("F1 Score Test Data: ", round(f1_score(y_test, yp_test), 4))
-    print("--------------------------------------------------------------------------")
-    
-    t1.plot()
-    t2.plot()   
-    t3.plot()
-
-evaluation_parametrics("Convolution Neural Network", y_train, yp_train, y_val, yp_val, y_test, yp_test)
-# list all data in history
-
-print(history.history.keys())
+print(conv_model.history.keys())
 
 # Summarize History for Accuracy
 
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_accuracy'])
+plt.plot(conv_model.history['accuracy'])
+plt.plot(conv_model.history['val_accuracy'])
 plt.title('Model Accuracy')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
@@ -300,22 +223,23 @@ plt.show()
 
 # Summarize History for Loss
 
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
+plt.plot(conv_model.history['loss'])
+plt.plot(conv_model.history['val_loss'])
 plt.title('Model Loss')
 plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Validation'], loc = 'upper right')
 plt.show()
 
+
 # Accuracy Loss Graph
 
-pd.DataFrame(history.history).plot()
+pd.DataFrame(conv_model.history).plot()
 plt.title('Model Accuracy/Loss')
 plt.ylabel('Accuracy/Loss')
 plt.xlabel('Epoch')
 plt.show()
-'''
+
 model_builder = keras.applications.xception.Xception
 img_size = (299, 299)
 preprocess_input = keras.applications.xception.preprocess_input
@@ -324,17 +248,10 @@ imag = []
 
 last_conv_layer_name = "block14_sepconv2_act"
 
-# Reading 2 Covid & 2 Normal Images for Grad-Cam Analysis
-#Marcel Dateipfad
-# img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Viral Pneumonia/images/Viral Pneumonia-1003.png",
-#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Normal/images/Normal-10004.png",
-#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/Lung_Opacity/images/Lung_Opacity-1000.png",
-#                       "D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
-
-img_path = ["C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-86.png"]
+#img_path = ["C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-86.png"]
 
 
-#img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
+img_path = ["D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/Dataset/COVID/images/COVID-1008.png"]
 # To Get Image into numpy array
 
 def get_img_array(img_path, size):
@@ -417,10 +334,6 @@ for j in range(len(z)):
             z[j] = 'Normal'
     else:
         z[j] = "Covid"
-    #z[z==0]="Normal"
-    #z[z==1]="Covid"
-    #z = z.replace(1, "Covid")
-    #print(img_path)
     print("Image", img_path.index(i) + 1, ":", z)
 
 
