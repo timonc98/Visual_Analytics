@@ -11,10 +11,13 @@ from PIL import Image
 
 def main():
     st.set_page_config(layout="wide")
-    image = Image.open("C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/covid-19.png")
+    image = Image.open("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/covid-19.png")
     st.sidebar.image(image, use_column_width=True)
     st.sidebar.markdown("<h1 style='text-align: center; text-decoration: underline;'>Visual Analytics</h1>", unsafe_allow_html=True)
     st.sidebar.markdown("<h3 style='text-align: center;'>Seiten auswählen:</h3>", unsafe_allow_html=True)
+
+    # Pfad ändern
+    path = 'D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual'
 
     pages = {
         "Allgemein": "Allgemein",
@@ -37,29 +40,29 @@ def main():
         # Expander für Data Augmentation
         with st.expander("Counterplot Data:"):
         # Counterplot Dataset
-            image = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/plot.png')
+            image = Image.open(path + '/Dashboard_Images/plot.png')
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.subheader("Model Accuracy/Loss")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Accuracy.png"
+                image_top_middle_path = path + "/Dashboard_Images/Model_Accuracy_Loss.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=470)
 
             with col2:
                 st.subheader("Model Loss")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/loss.png"
+                image_top_middle_path = path + "/Dashboard_Images/Model_Loss.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=470)
 
             with col3:
-                st.subheader("Mean and standard deviation of Image Samples")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/plot_sd.png"
+                st.subheader("Mean and standard deviation")
+                image_top_middle_path = path + "/Dashboard_Images/Model_Standard_Deviation_Mean.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=400)
 
         # Expander für Data Augmentation
         with st.expander("Data Augmentation"):
-            image_augmentation = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Augmentations.png')
+            image_augmentation = Image.open(path + '/Dashboard_Images/Augmentations.png')
             st.image(image_augmentation, caption='Data Augmentation')
 
     elif selected_page == "Interface":
@@ -68,7 +71,7 @@ def main():
             st.header("Covid-19 Interface 1 COVID-86 :microbe:")
 
             with st.expander("Data Augmentation"):
-                image_augmentation = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_Augmentations.png')
+                image_augmentation = Image.open(path + '/Dashboard_Images/COVID-828_Augmentations.png')
                 st.image(image_augmentation, caption='Data Augmentation')
 
             # Spaltenaufteilung der oberen Zeile
@@ -89,7 +92,7 @@ def main():
 
             with col2_top:
                 st.subheader("Original")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-828.png"
+                image_top_middle_path = path + "/Dataset/COVID/images/COVID-828.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=230)
 
@@ -106,19 +109,19 @@ def main():
             # Bilder in der mittleren Zeile
             with col1_middle:
                 st.subheader("Grad-CAM")
-                image_bottom_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID_828_Grad_Cam.jpg"
+                image_bottom_left_path = path + "/Dashboard_Images/COVID_828_Grad_Cam.jpg"
                 image_bottom_left = Image.open(image_bottom_left_path)
                 st.image(image_bottom_left, width=250)
 
             with col2_middle:
                 st.subheader("Pertinent Negatives")
-                image_bottom_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PN_neu2.png"
+                image_bottom_middle_path = path + "/Dashboard_Images/COVID-828_PN_neu2.png"
                 image_bottom_middle = Image.open(image_bottom_middle_path)
                 st.image(image_bottom_middle, width=700)
 
             with col3_middle:
                 st.subheader("Pertinent Positives")
-                image_bottom_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-828_PP.png"
+                image_bottom_right_path = path + "/Dashboard_Images/COVID-828_PP.png"
                 image_bottom_right = Image.open(image_bottom_right_path)
                 st.image(image_bottom_right, width=350)
             
@@ -127,7 +130,7 @@ def main():
             st.header("Covid-19 Interface 2 Normal-210 :microbe:")
             
             with st.expander("Data Augmentation"):
-                image_augmentation = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-210_Augmentations.png')
+                image_augmentation = Image.open(path + '/Dashboard_Images/Normal-210_Augmentations.png')
                 st.image(image_augmentation, caption='Data Augmentation')
 
             # Spaltenaufteilung der oberen Zeile
@@ -147,7 +150,7 @@ def main():
 
             with col2_top:
                 st.subheader("Original")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-210.png"
+                image_top_middle_path = path + "/Dataset/Normal/images/Normal-210.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=250)
 
@@ -164,19 +167,19 @@ def main():
             # Bilder in der mittleren Zeile
             with col1_middle:
                 st.subheader("Grad-CAM")
-                image_bottom_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-210_Grad_Cam.jpg"
+                image_bottom_left_path = path + "/Dashboard_Images/Normal-210_Grad_Cam.jpg"
                 image_bottom_left = Image.open(image_bottom_left_path)
                 st.image(image_bottom_left, width=250)
 
             with col2_middle:
                 st.subheader("Pertinent Negatives")
-                image_bottom_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-210_PN.png"
+                image_bottom_middle_path = path + "/Dashboard_Images/Normal-210_PN.png"
                 image_bottom_middle = Image.open(image_bottom_middle_path)
                 st.image(image_bottom_middle, width=250)
 
             with col3_middle:
                 st.subheader("Pertinent Positives")
-                image_bottom_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-210_PP.png"
+                image_bottom_right_path = path + "/Dashboard_Images/Normal-210_PP.png"
                 image_bottom_right = Image.open(image_bottom_right_path)
                 st.image(image_bottom_right, width=250)
 
@@ -184,7 +187,7 @@ def main():
             st.header("Covid-19 Interface 3 Normal-219 :microbe:")
             
             with st.expander("Data Augmentation"):
-                image_augmentation = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-219_Augmentations.png')
+                image_augmentation = Image.open(path + '/Dashboard_Images/Normal-219_Augmentations.png')
                 st.image(image_augmentation, caption='Data Augmentation')
 
             # Spaltenaufteilung der oberen Zeile
@@ -204,7 +207,7 @@ def main():
 
             with col2_top:
                 st.subheader("Original")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/Normal/images/Normal-219.png"
+                image_top_middle_path = path + "/Dataset/Normal/images/Normal-219.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=250)
 
@@ -221,28 +224,28 @@ def main():
             # Bilder in der mittleren Zeile
             with col1_middle:
                 st.subheader("Grad-CAM")
-                image_bottom_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-219_Grad_Cam.jpg"
+                image_bottom_left_path = path + "/Dashboard_Images/Normal-219_Grad_Cam.jpg"
                 image_bottom_left = Image.open(image_bottom_left_path)
                 st.image(image_bottom_left, width=250)
 
             with col2_middle:
                 st.subheader("Pertinent Negatives")
-                image_bottom_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-219_PN.png"
+                image_bottom_middle_path = path + "/Dashboard_Images/Normal-219_PN.png"
                 image_bottom_middle = Image.open(image_bottom_middle_path)
                 st.image(image_bottom_middle, width=250)
 
             with col3_middle:
                 st.subheader("Pertinent Positives")
-                image_bottom_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/Normal-219_PP.png"
+                image_bottom_right_path = path + "/Dashboard_Images/Normal-219_PP.png"
                 image_bottom_right = Image.open(image_bottom_right_path)
                 st.image(image_bottom_right, width=250)
 
 
         if selected_example == "Interface 4":
-            st.header("Covid-19 Interface 4 Missclasification :microbe:")
+            st.header("Covid-19 Interface 4 Misclassification :microbe:")
 
             with st.expander("Data Augmentation"):
-                image_augmentation = Image.open('C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-86_Augmentations.png')
+                image_augmentation = Image.open(path + '/Dashboard_Images/COVID-86_Augmentations.png')
                 st.image(image_augmentation, caption='Data Augmentation')
 
             # Spaltenaufteilung der oberen Zeile
@@ -263,7 +266,7 @@ def main():
 
             with col2_top:
                 st.subheader("Original")
-                image_top_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dataset/COVID/images/COVID-86.png"
+                image_top_middle_path = path + "/Dataset/COVID/images/COVID-86.png"
                 image_top_middle = Image.open(image_top_middle_path)
                 st.image(image_top_middle, width=230)
 
@@ -280,19 +283,19 @@ def main():
             # Bilder in der mittleren Zeile
             with col1_middle:
                 st.subheader("Grad-CAM")
-                image_bottom_left_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-86_Grad_Cam.jpg"
+                image_bottom_left_path = path + "/Dashboard_Images/COVID-86_Grad_Cam.jpg"
                 image_bottom_left = Image.open(image_bottom_left_path)
                 st.image(image_bottom_left, width=250)
 
             with col2_middle:
                 st.subheader("Pertinent Negatives")
-                image_bottom_middle_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-86_PN.png"
+                image_bottom_middle_path = path + "/Dashboard_Images/COVID-86_PN.png"
                 image_bottom_middle = Image.open(image_bottom_middle_path)
                 st.image(image_bottom_middle, width=250)
 
             with col3_middle:
                 st.subheader("Pertinent Positives")
-                image_bottom_right_path = "C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual/Dashboard_Images/COVID-86_PP.png"
+                image_bottom_right_path = path + "/Dashboard_Images/COVID-86_PP.png"
                 image_bottom_right = Image.open(image_bottom_right_path)
                 st.image(image_bottom_right, width=250)
 if __name__ == '__main__':
