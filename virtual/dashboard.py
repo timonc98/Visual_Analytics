@@ -9,15 +9,17 @@
 import streamlit as st
 from PIL import Image
 
-def main():
+def main():  
+    # Pfad ändern
+    path = 'C:/Hochschule Aalen/Visual Analytics/Visual_Analytics/virtual'
+    #path = 'D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual'
     st.set_page_config(layout="wide")
-    image = Image.open("D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual/covid-19.png")
+    image = Image.open(path + '/covid-19.png')
     st.sidebar.image(image, use_column_width=True)
     st.sidebar.markdown("<h1 style='text-align: center; text-decoration: underline;'>Visual Analytics</h1>", unsafe_allow_html=True)
     st.sidebar.markdown("<h3 style='text-align: center;'>Seiten auswählen:</h3>", unsafe_allow_html=True)
 
-    # Pfad ändern
-    path = 'D:/Daten-Marcel/2.Fachsemester/01_Visual Analytics/Projekt/Visual_Analytics/virtual'
+  
 
     pages = {
         "Allgemein": "Allgemein",
